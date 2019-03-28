@@ -98,9 +98,9 @@ function tests() {
 
 			folder.isHierarchy({camelThrough: true});
 
-			expect(folder.attributes.hierarchyLevel.type).not.to.equal(Sequelize.STRING);
+			expect((folder.rawAttributes || folder.attributes).hierarchyLevel.type).not.to.equal(Sequelize.STRING);
 
-			expect(folder.attributes.parentId.references).to.deep.equal(semverSelect(sequelizeVersion, {
+			expect((folder.rawAttributes || folder.attributes).parentId.references).to.deep.equal(semverSelect(sequelizeVersion, {
 				'<3.0.1': 'folders',
 				'>=3.0.1': {model: 'folders', key: 'id'}
 			}));
@@ -1152,10 +1152,10 @@ function tests() {
 
 				folder.isHierarchy();
 
-				expect(folder.attributes).to.have.property('hierarchy_level');
-				expect(folder.attributes).to.have.property('parent_id');
-				expect(folder.associations.ancestors.through.model.attributes).to.have.property('folder_id');
-				expect(folder.associations.ancestors.through.model.attributes).to.have.property('ancestor_id');
+				expect((folder.rawAttributes || folder.attributes)).to.have.property('hierarchy_level');
+				expect((folder.rawAttributes || folder.attributes)).to.have.property('parent_id');
+				expect((folder.associations.ancestors.through.model.rawAttributes || folder.associations.ancestors.through.model.attributes)).to.have.property('folder_id');
+				expect((folder.associations.ancestors.through.model.rawAttributes || folder.associations.ancestors.through.model.attributes)).to.have.property('ancestor_id');
 				expect(folder.associations.ancestors.foreignKey).to.equal('folder_id');
 				expect(folder.associations.children.foreignKey).to.equal('parent_id');
 			});
@@ -1174,10 +1174,10 @@ function tests() {
 					throughForeignKey: 'testThroughForeignKey'
 				});
 
-				expect(folder.attributes).to.have.property('testFieldName');
-				expect(folder.attributes).to.have.property('testForeignKey');
-				expect(folder.associations.ancestors.through.model.attributes).to.have.property('testThroughForeignKey');
-				expect(folder.associations.ancestors.through.model.attributes).to.have.property('testThroughKey');
+				expect((folder.rawAttributes || folder.attributes)).to.have.property('testFieldName');
+				expect((folder.rawAttributes || folder.attributes)).to.have.property('testForeignKey');
+				expect((folder.associations.ancestors.through.model.rawAttributes || folder.associations.ancestors.through.model.attributes)).to.have.property('testThroughForeignKey');
+				expect((folder.associations.ancestors.through.model.rawAttributes || folder.associations.ancestors.through.model.attributes)).to.have.property('testThroughKey');
 				expect(folder.associations.ancestors.foreignKey).to.equal('testThroughKey');
 				expect(folder.associations.children.foreignKey).to.equal('testForeignKey');
 				expect(folder.associations.ancestors.through.model.tableName).to.equal('foldersancestors');
